@@ -36,10 +36,22 @@ const colors = [
 
 const C = canvas.getContext("2d");
 const ctx = C;
-const width = canvas.width;
-const height = canvas.height;
-const r = 10;
+const width = window.innerWidth;
+const height = window.innerHeight;
+canvas.width = `${width}`;
+canvas.height = `${height}`;
 
+let mouseX = undefined;
+let mouseY = undefined;
+
+document.addEventListener("mousemove", function (e) {
+  mouseX = e.x;
+  mouseY = e.y;
+});
+canvas.addEventListener("mouseleave", function (e) {
+  mouseX = undefined;
+  mouseY = undefined;
+});
 function oneObj(x, dx, y, dy, r) {
   this.x = x;
   this.dx = dx;
@@ -47,6 +59,9 @@ function oneObj(x, dx, y, dy, r) {
   this.dy = dy;
   this.r = r;
   this.stroke = "white";
+  this.intractiveR = 30;
+  this.fill = undefined;
+
   this.draw = function () {
     C.strokeStyle = this.stroke;
 
@@ -54,6 +69,10 @@ function oneObj(x, dx, y, dy, r) {
     C.arc(this.x, this.y, this.r, 0, Math.PI * 2);
     C.stroke();
     ctx.closePath();
+    C.fillStyle = this.fill;
+    if (this.fill) {
+      C.fill();
+    }
   };
 
   this.update = function () {
@@ -68,18 +87,37 @@ function oneObj(x, dx, y, dy, r) {
     this.x += this.dx;
     this.y += this.dy;
 
+    if (
+      this.x - mouseX < this.intractiveR &&
+      this.x - mouseX > -this.intractiveR &&
+      this.y - mouseY < this.intractiveR &&
+      this.y - mouseY > -this.intractiveR
+    ) {
+      if (this.r < r * 2) {
+        this.r += 1;
+      }
+      this.fill=this.stroke
+    } else {
+      if(this.r > r){
+        this.r -= 1;
+      }
+      this.fill=undefined
+    }
+
     this.draw();
   };
 }
 
 let arrayOfObj = [];
 
-for (let i = 0; i < 100; i++) {
-  const randomX = Math.ceil(Math.random() * (width - 30))+10;
-  const randomY = Math.ceil(Math.random() * (height - 30))+10;
-  const randomDX = Math.random() - 0.5 ;
-  const randomDY = Math.random() - 0.5 ;
-  const cir_1 = new oneObj(randomX, randomDX, randomY, randomDY, 10);
+for (let i = 0; i < 200; i++) {
+  const maxRadius = 19;
+  const radius = Math.random() * maxRadius+1;
+  const randomX = Math.random() * (width - maxRadius * 2) + maxRadius;
+  const randomY = Math.random() * (height - maxRadius * 2) + maxRadius;
+  const randomDX = Math.random() - 0.5;
+  const randomDY = Math.random() - 0.5;
+  const cir_1 = new oneObj(randomX, randomDX, randomY, randomDY, radius);
   arrayOfObj.push(cir_1);
 }
 

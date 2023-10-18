@@ -36,13 +36,20 @@ const colors = [
 
 const C = canvas.getContext("2d");
 const ctx = C;
-const width = window.innerWidth;
-const height = window.innerHeight;
+let width = window.innerWidth;
+let height = window.innerHeight;
 canvas.width = `${width}`;
 canvas.height = `${height}`;
 
 let mouseX = undefined;
 let mouseY = undefined;
+
+window.addEventListener("resize", function (e) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  width = window.innerWidth;
+  height = window.innerHeight;
+});
 
 document.addEventListener("mousemove", function (e) {
   mouseX = e.x;
@@ -76,14 +83,22 @@ function oneObj(x, dx, y, dy, r) {
   };
 
   this.update = function () {
-    if (this.x + this.r > width || this.x < this.r) {
+    if (Math.floor(this.x + this.r)== width || Math.floor(this.x) == Math.floor(this.r)) {
       this.dx = -this.dx;
       this.stroke = colors[Math.floor(Math.random() * (colors.length - 1))];
     }
-    if (this.y + this.r > height || this.y < this.r) {
+    if (this.x > width+ this.r ) {
+      this.x = width / 2;
+    }
+    if (Math.floor(this.y + this.r) == height || Math.floor(this.y) == Math.floor(this.r)) {
       this.dy = -this.dy;
       this.stroke = colors[Math.floor(Math.random() * colors.length)];
     }
+
+    if (this.y > height+ this.r ) {
+      this.y = height / 2;
+    }
+
     this.x += this.dx;
     this.y += this.dy;
 
@@ -96,12 +111,12 @@ function oneObj(x, dx, y, dy, r) {
       if (this.r < r * 2) {
         this.r += 1;
       }
-      this.fill=this.stroke
+      this.fill = this.stroke;
     } else {
-      if(this.r > r){
+      if (this.r > r) {
         this.r -= 1;
       }
-      this.fill=undefined
+      this.fill = undefined;
     }
 
     this.draw();
@@ -112,7 +127,7 @@ let arrayOfObj = [];
 
 for (let i = 0; i < 200; i++) {
   const maxRadius = 19;
-  const radius = Math.random() * maxRadius+1;
+  const radius = Math.random() * maxRadius + 1;
   const randomX = Math.random() * (width - maxRadius * 2) + maxRadius;
   const randomY = Math.random() * (height - maxRadius * 2) + maxRadius;
   const randomDX = Math.random() - 0.5;

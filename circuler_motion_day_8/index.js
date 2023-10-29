@@ -24,15 +24,25 @@ canvas.addEventListener("mouseleave", function (e) {
 });
 let mouseRec;
 
+function roundUpToNearestTen(number) {
+  if(number==0)return 10
+  if (number % 10 === 0) {
+    return number;
+  } else {
+    console.log(Math.ceil(number / 10) * 10)
+    return Math.ceil(number / 10) * 10;
+  }
+}
+
 function obj(X, Y, angle, i) {
-  // this.index=i
+  this.dis = roundUpToNearestTen(i);
   this.R = 5;
   this.angle = angle;
   this.velocity = 0.01;
   this.color = "black";
   this.draw = function () {
-    let x = X + Math.cos(this.angle) * (this.R * (10 * (i + 0.1)));
-    let y = Y + Math.sin(this.angle) * (this.R * (10 * (i + 0.1)));
+    let x = X + Math.cos(this.angle) * (this.R * (  this.dis));
+    let y = Y + Math.sin(this.angle) * (this.R * (  this.dis));
     C.beginPath();
     C.fillStyle = this.color;
     C.arc(x, y, this.R, 0, Math.PI * 2);
@@ -48,7 +58,7 @@ function obj(X, Y, angle, i) {
 }
 
 let rec = [];
-const objLength = 10;
+const objLength = 50;
 for (let i = 0; i < objLength; i++) {
   const x = width / 2;
   const y = height / 2;
@@ -58,7 +68,8 @@ for (let i = 0; i < objLength; i++) {
 }
 mouseRec = rec[0];
 function animate() {
-  C.clearRect(0, 0, width, height);
+  C.fillStyle='rgba(0,0,0,0.01)'
+  C.fillRect(0, 0, width, height);
   rec.forEach((rec) => rec.update());
   requestAnimationFrame(animate);
 }

@@ -25,28 +25,31 @@ canvas.addEventListener("mouseleave", function (e) {
 let mouseRec;
 
 function roundUpToNearestTen(number) {
-  if(number==0)return 10
+  if (number == 0) return 10;
   if (number % 10 === 0) {
     return number;
   } else {
-    console.log(Math.ceil(number / 10) * 10)
+    console.log(Math.ceil(number / 10) * 10);
     return Math.ceil(number / 10) * 10;
   }
 }
 
 function obj(X, Y, angle, i) {
-  this.dis = roundUpToNearestTen(i);
-  this.R = 5;
+  this.R = 15;
+  this.dis = Math.random()*this.R*8;
   this.angle = angle;
   this.velocity = 0.01;
   this.color = "black";
   this.draw = function () {
-    let x = X + Math.cos(this.angle) * (this.R * (  this.dis));
-    let y = Y + Math.sin(this.angle) * (this.R * (  this.dis));
+    // console.log(this.dis)
+    let x = X + Math.cos(this.angle) * ((this.R*8) + this.dis);
+    let y = Y + Math.sin(this.angle) * ((this.R*8) + this.dis);
     C.beginPath();
     C.fillStyle = this.color;
-    C.arc(x, y, this.R, 0, Math.PI * 2);
-    C.fill();
+    // C.arc(x, y, this.R, 0, Math.PI * 2);
+    C.moveTo(x,y)
+    C.lineTo(x+50,y+50)
+    C.stroke();
     C.closePath();
   };
 
@@ -68,8 +71,8 @@ for (let i = 0; i < objLength; i++) {
 }
 mouseRec = rec[0];
 function animate() {
-  C.fillStyle='rgba(0,0,0,0.01)'
-  C.fillRect(0, 0, width, height);
+  // C.fillStyle = "rgba(0,0,0,0.001)";
+  C.clearRect(0, 0, width, height);
   rec.forEach((rec) => rec.update());
   requestAnimationFrame(animate);
 }

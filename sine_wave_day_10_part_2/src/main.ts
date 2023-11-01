@@ -10,8 +10,9 @@ if (ctx) {
   addGuiControl();
   const newSine = new (sine as any)({ ctx, x: width, y: height });
 
+  ctx.fillStyle='rgba(255, 255, 255, 0.01)'
   function animate() {
-    ctx?.clearRect(0,0,width,height)
+    ctx?.fillRect(0,0,width,height)
     newSine.draw();
     requestAnimationFrame(animate);
   }
